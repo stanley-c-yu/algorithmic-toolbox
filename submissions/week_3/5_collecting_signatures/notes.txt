@@ -1,0 +1,23 @@
+Inputs: 
+	- segments: an array of tuples that maintain line segment coordinates that represent
+		periods of time in which a resident is home.   
+
+Steps: 
+	0.  Create an empty points array. 
+	1.  Sort array of tuples in ascending order. 
+	2.  For each segment tuple: 
+		Append the start and stop to the Points Array.  
+		If start falls within the bounds of the next segment tuple, keep it, 
+			otherwise, remove it from the points array.  
+		If the end falls within the bounds of the next segment tuple, keep it, 
+			otherwise, remove it from the points array.  
+		If one of the start or end points falls within the next segment, skip it
+			or remove it from the list of tuple segments. 
+		Move on to the next non-covered segment.  
+		Append the start and stop coordinates to the Points Array.  
+		Check if they fall within the next segment tuple.  Keep the points that do, 
+			remove the rest.  
+		If they don't, check to see if this segment encompasses the next segment.  
+		If it encompasses the next segment, move on to the next segment.  
+		Repeat process, unless it's the last segment, and it isn't covered.  
+			If it isn't covered, add the endpoint.  
