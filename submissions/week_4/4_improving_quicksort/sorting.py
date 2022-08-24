@@ -27,13 +27,12 @@ import random
         # idx += 1
     # return l_idx_copy, r_idx_copy
 
-def partition(arr, l, r): 
+def partition(arr, l, r, index): 
     i = 0
     l_idx_cp = l 
     r_idx_cp = r
     pivot_val = arr[l]
     while i <= r_idx_cp:
-        #print(l_idx_cp, r_idx_cp)
         if arr[i] < pivot_val: 
             arr[i], arr[l_idx_cp] = arr[l_idx_cp], arr[i]
             l_idx_cp += 1
@@ -42,9 +41,14 @@ def partition(arr, l, r):
             r_idx_cp -= 1 
             i -= 1
         i += 1 
-        #print(arr)
-    return arr
-    #return l_idx_cp, r_idx_cp
+    if index == True:
+            print("Partitioned Array: ", arr)
+            print("Left side of partition: ", l_idx_cp, "|", "Right side of partition: ", r_idx_cp)
+            return l_idx_cp, r_idx_cp
+    else:
+        print("Partitioned Array: ", arr)
+        return arr
+
 
 
 def partition3(a, l, r):
