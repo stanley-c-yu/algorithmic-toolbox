@@ -2,32 +2,15 @@
 import sys
 import random
 
-# def partition3(a, l, r):
-    # '''
-    # Inputs:
-        # a: array of elements 
-        # l: the index of the leftmost element of the array, "a" 
-        # r: the index of the rightmost element of the array, "a" 
-    # Returns: 
-        # The left and right coordinates that mark the beginning and end of our "bulk" pivot  
-    # '''
-    # #write your code here
-    # l_element_copy = a[l] # copy the left element.  We're creating our pivot by trying to group elements idential to the leftmost value
-    # l_idx_copy = l # copy of the index of the leftmost element 
-    # r_idx_copy = r # copy of the index of the rightmost element
-    # idx = l_idx_copy # integer that is used to reference elements from the array one by one, starting the from the left 
-    # while idx < r_idx_copy: 
-        # if a[idx] < l_element_copy: # if the current element we're looking at is less than the initial left most value, ... 
-            # a[idx], a[l_idx_copy] = a[l_idx_copy], a[idx] # ...then we move the leftmost value to that position, and move the current element value to now former position of the leftmost value, s.t. it's now right of the leftmost value.  
-            # l_idx_copy += 1 # increment by one so that if we need to make a swap, the new like value is getting appended to the end of the "like" group.  
-        # elif a[idx] > l_element_copy: # or if the current element we're looking at is actually greater than left most value, ... 
-            # a[r_idx_copy], a[idx] = a[idx], a[r_idx_copy] # ... then we move the current value to the position of the right most value.  We swap!  E.g., [2,3,9,2,2] to [2,2,9,2,3]
-            # r_idx_copy -= 1  # decrement by one so that we don't make redundant swaps on the right.  We're not trying to sort the entire thing, just group elements equal to the left most value together.  
-            # idx -= 1 
-        # idx += 1
-    # return l_idx_copy, r_idx_copy
-
-def partition(arr, l, r, index): 
+def partition3(arr, l, r, index): 
+    '''
+    Inputs:
+        a: array of elements 
+        l: the index of the leftmost element of the array, "a" 
+        r: the index of the rightmost element of the array, "a" 
+    Returns: 
+        The left and right coordinates that mark the beginning and end of our "bulk" pivot  
+    '''
     i = 0
     l_idx_cp = l 
     r_idx_cp = r
@@ -49,24 +32,6 @@ def partition(arr, l, r, index):
         print("Partitioned Array: ", arr)
         return arr
 
-
-
-def partition3(a, l, r):
-   x, j, t = a[l], l, r
-   i = j
-
-   while i <= t :
-      if a[i] < x:
-         a[j], a[i] = a[i], a[j]
-         j += 1
-
-      elif a[i] > x:
-         a[t], a[i] = a[i], a[t]
-         t -= 1
-         i -= 1 # remain in the same i in this case
-      i += 1   
-   return j, t
-
 def partition2(a, l, r):
     x = a[l]
     j = l
@@ -77,17 +42,33 @@ def partition2(a, l, r):
     a[l], a[j] = a[j], a[l]
     return j
 
-
-def randomized_quick_sort(a, l, r):
+def nonrandomized_quick_sort(a, l, r, index, return_partitions):
+    '''
+    Debug version without randomization to ensure consistent test results with test cases.  
+    '''
+    if l >= r:
+        return 
+    mid_left_idx, mid_right_idx = partition3(a, l, r, index)    
+    if return_partitions == True: 
+        print("Left of Pivot Partition: ", a[l:mid_left_idx])
+        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
+        return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
+    #use partition3
+    randomized_quick_sort(a, l, mid_left_idx - 1)
+    randomized_quick_sort(a, mid_right_idx + 1, r) 
+    return a
+        
+def randomized_quick_sort(a, l, r, index, return_partitions):
     if l >= r:
         return 
     k = random.randint(l, r)
     a[l], a[k] = a[k], a[l]
-    mid_left_idx, mid_right_idx = partition3(a, l, r)
+    mid_left_idx, mid_right_idx = partition3(a, l, r, index)
+    if return_partitions == True: 
+        print("Left of Pivot Partition: ", a[l:mid_left_idx])
+        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
+        return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
     #use partition3
-    #print(m)
-    #randomized_quick_sort(a, l, m - 1);
-    #randomized_quick_sort(a, m + 1, r);
     randomized_quick_sort(a, l, mid_left_idx - 1)
     randomized_quick_sort(a, mid_right_idx + 1, r) 
     return a
