@@ -1,5 +1,5 @@
 import unittest 
-from sorting import randomized_quick_sort,nonrandomized_quick_sort, partition3
+from sorting import randomized_quick_sort, nonrandomized_quick_sort, left_sided_quick_sort, right_sided_quick_sort, partition3
 
 class TestQuickSort(unittest.TestCase):
         
@@ -101,4 +101,41 @@ class TestQuickSort(unittest.TestCase):
         result = nonrandomized_quick_sort(a = [0, 1, 2, 0, 2, 1, 1], l = 0, r = 6, index = True, return_partitions= True)
         self.assertEqual(result, ([], [2, 2, 1, 1, 1]))
         
+    def test_left_sided_qs_pivot_is_2(self): 
+        # Pivot is 2, array after pivot chosen and moved to left is identical to original.  
+        print("----------------")
+        print("Test: Pivot is 2.  When presented with an 'empty' left side, will the quicksort correctly return the same array it was presented with?")
+        result = left_sided_quick_sort(a = [2, 3, 9, 2, 2], l = 0, r = 4, index = True, return_partitions = False)
+        self.assertEqual(result, [2, 2, 2, 9, 3])
+        
+    def test_left_sided_qs_pivot_is_9(self):
+        # Pivot is 9 
+        print("----------------")
+        print("Test: Pivot is 9.  When presented with a non-empty left side, will the quicksort correctly return the array with elements left of the pivot sorted?")
+        result = left_sided_quick_sort(a = [9, 3, 2, 2, 2], l = 0, r = 4, index = True, return_partitions = False)
+        self.assertEqual(result, [2, 2, 2, 3, 9])
+
+    def test_left_sided_qs_pivot_is_3(self):
+        # Pivot is 3 
+        print("----------------")
+        print("Test: Pivot is 3.  When given an array where the pivot partition is in the middle, will the algo correctly sort the left side and leave the rest as is?")
+        result = left_sided_quick_sort(a = [3, 2, 9, 1, 1], l = 0, r = 4, index = True, return_partitions = False)
+        self.assertEqual(result, [1, 1, 2, 3, 9])
+        
+    def test_right_sided_qs_pivot_is_2(self): 
+        # Pivot is 2.  Correctly sort right side of array when left is the pivot?
+        print("----------------")
+        print("Test: Pivot is 2.  When given an array where the pivot partition is on the left, will the algo correctly sort the right side and return a completely sorted array?")
+        result = right_sided_quick_sort(a = [2, 3, 9, 2, 2], l = 0, r = 4, index = True, return_partitions = False)
+        self.assertEqual(result, [2, 2, 2, 3, 9])
+        
+    def test_right_sided_qs_pivot_is_mid(self):
+        # Pivot is mid.  Correct sorting of right side and not left?  
+        print("----------------")
+        print("Test: Right side sorted of pivot, while left remains unsorted.")
+        result = right_sided_quick_sort(a = [2, 3, 9, 2, 2, 1, 1, 1], l = 0, r = 7, index = True, return_partitions = False)
+        self.assertEqual(result, [1, 1, 1, 2, 2, 2, 3, 9])
+
+        
+
 unittest.main() 
