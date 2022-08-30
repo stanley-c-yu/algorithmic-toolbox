@@ -2,37 +2,8 @@
 import sys
 import random
 
-def partition3(arr, l, r, index): 
-    '''
-    Inputs:
-        a: array of elements 
-        l: the index of the leftmost element of the array, "a" 
-        r: the index of the rightmost element of the array, "a" 
-    Returns: 
-        The left and right coordinates that mark the beginning and end of our "bulk" pivot  
-    '''
-    i = 0
-    l_idx_cp = l 
-    r_idx_cp = r
-    pivot_val = arr[l]
-    while i <= r_idx_cp:
-        if arr[i] < pivot_val: 
-            arr[i], arr[l_idx_cp] = arr[l_idx_cp], arr[i]
-            l_idx_cp += 1
-        elif arr[i] > pivot_val:
-            arr[i], arr[r_idx_cp] = arr[r_idx_cp], arr[i]
-            r_idx_cp -= 1 
-            i -= 1
-        i += 1 
-    if index == True:
-            print("Partitioned Array: ", arr)
-            print("Left side of partition: ", l_idx_cp, "|", "Right side of partition: ", r_idx_cp)
-            return l_idx_cp, r_idx_cp
-    else:
-        print("Partitioned Array: ", arr)
-        return arr
-
 def partition2(a, l, r):
+    '''A simple, but slower operating parititon function.'''
     x = a[l]
     j = l
     for i in range(l + 1, r + 1):
@@ -42,64 +13,44 @@ def partition2(a, l, r):
     a[l], a[j] = a[j], a[l]
     return j
 
-def nonrandomized_quick_sort(a, l, r, index, return_partitions):
+def partition3(arr, l, r): 
     '''
-    Debug version without randomization to ensure consistent test results with test cases.  
+    Takes an array and sorts it into three partitions: 
+    everything less than the pivot value, everything equal to the pivot value,
+    and everything greater than the pivot value.
+    
+    Inputs: 
+        arr: array of elements 
+        l: the index of the left most element of arr.  
+            The element at l is equal to a pivot randomly chosen by randomized quick sort.  
+        r: the index of the right most element of arr 
+    Returns:
+        The left and right coordinates of the pivot segment.  
     '''
-    if l >= r:
-        return 
-    mid_left_idx, mid_right_idx = partition3(a, l, r, index)    
-    if return_partitions == True: 
-        print("Left of Pivot Partition: ", a[l:mid_left_idx])
-        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r])
-        return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
-    #use partition3
-    randomized_quick_sort(a, l, mid_left_idx - 1)
-    randomized_quick_sort(a, mid_right_idx + 1, r) 
-    return a
-    
-def left_sided_quick_sort(a, l, r, index, return_partitions):
-    if l >= r:
-        return 
-    mid_left_idx, mid_right_idx = partition3(a, l, r, index)    
-    if return_partitions == True: 
-        print("Left of Pivot Partition: ", a[l:mid_left_idx])
-        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
-        return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
-    #use partition3
-    left_sided_quick_sort(a, l, mid_left_idx - 1, index, return_partitions)
-    #randomized_quick_sort(a, mid_right_idx + 1, r) 
-    return a
-    
-def right_sided_quick_sort(a, l, r, index, return_partitions):
-    if l >= r:
-        return 
-    mid_left_idx, mid_right_idx = partition3(a, l, r, index)    
-    if return_partitions == True: 
-        print("Left of Pivot Partition: ", a[l:mid_left_idx])
-        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r])
-        return a[l:mid_left_idx], a[mid_right_idx + 1:r]
-    #use partition3
-    #left_sided_quick_sort(a, l, mid_left_idx - 1, index, return_partitions)
-    right_sided_quick_sort(a, mid_right_idx + 1, r, index, return_partitions) 
-    return a    
-        
-def randomized_quick_sort(a, l, r, index, return_partitions):
-    if l >= r:
-        return 
-    k = random.randint(l, r)
-    a[l], a[k] = a[k], a[l]
-    mid_left_idx, mid_right_idx = partition3(a, l, r, index)
-    if return_partitions == True: 
-        print("Left of Pivot Partition: ", a[l:mid_left_idx])
-        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
-        return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
-    #use partition3
-    randomized_quick_sort(a, l, mid_left_idx - 1, index, return_partitions)
-    randomized_quick_sort(a, mid_right_idx + 1, r, index, return_partitions) 
-    return a
+    i = l # this needs to be set equal to l and not 0, otherwise we run into indexing errors
+    l_copy, r_copy = l, r
+    pivot_value = arr[l] # the pivot value is randomly chosen by quick sort and swapped into the 'l' position 
+    while i <= r_copy:
+        if arr[i] < pivot_value:
+            arr[i], arr[l_copy] = arr[l_copy], arr[i]
+            l_copy += 1
+        elif arr[i] > pivot_value:
+            arr[i], arr[r_copy] = arr[r_copy], arr[i]
+            r_copy -= 1 # we need to consistently shrink the area of operation to avoid doing unnecessary work.  
+            i -= 1 # when this kind of swap happens, we need to remain "in place" for operations to continue properly  
+        i += 1 
+    return l_copy, r_copy 
 
-
+def randomized_quick_sort(arr, l, r):
+    '''Randomly chooses a pivot and then recursively sorts an array around the pivot.'''
+    if l >= r: 
+        return
+    k = random.randint(l, r) # randomly choose an index that directly relates to the pivot value 
+    arr[l], arr[k] = arr[k], arr[l] # swap the pivot value into the 'l' position
+    pivot_start, pivot_end = partition3(arr, l, r) 
+    randomized_quick_sort(arr, l, pivot_start - 1) # sort below-pivot-partition
+    randomized_quick_sort(arr, pivot_end + 1, r) # sort above-pivot-partition
+    return arr
 
 
 if __name__ == '__main__':
