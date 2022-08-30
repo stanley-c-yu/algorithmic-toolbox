@@ -121,21 +121,20 @@ class TestQuickSort(unittest.TestCase):
         print("Test: Pivot is 3.  When given an array where the pivot partition is in the middle, will the algo correctly sort the left side and leave the rest as is?")
         result = left_sided_quick_sort(a = [3, 2, 9, 1, 1], l = 0, r = 4, index = True, return_partitions = False)
         self.assertEqual(result, [1, 1, 2, 3, 9])
-        
-    def test_right_sided_qs_pivot_is_2(self): 
-        # Pivot is 2.  Correctly sort right side of array when left is the pivot?
+    
+    def test_random_quick_sort_pivot_arr_2_3_9_2_2(self): 
         print("----------------")
-        print("Test: Pivot is 2.  When given an array where the pivot partition is on the left, will the algo correctly sort the right side and return a completely sorted array?")
-        result = right_sided_quick_sort(a = [2, 3, 9, 2, 2], l = 0, r = 4, index = True, return_partitions = False)
+        print("Sort array correctly.")
+        arr = [2, 3, 9, 2, 2]
+        result = randomized_quick_sort(a = arr, l = 0, r = 4, index = True, return_partitions = False)
         self.assertEqual(result, [2, 2, 2, 3, 9])
-        
-    def test_right_sided_qs_pivot_is_mid(self):
-        # Pivot is mid.  Correct sorting of right side and not left?  
-        print("----------------")
-        print("Test: Right side sorted of pivot, while left remains unsorted.")
-        result = right_sided_quick_sort(a = [2, 3, 9, 2, 2, 1, 1, 1], l = 0, r = 7, index = True, return_partitions = False)
-        self.assertEqual(result, [1, 1, 1, 2, 2, 2, 3, 9])
 
+    def test_random_quick_sort_pivot_arr_0_0_1_1_1_2_2(self):
+        print("----------------")
+        print("Sort array correctly.")
+        arr = [1, 0, 2, 0, 2, 1, 1]
+        result = randomized_quick_sort(a = arr, l = 0, r = 6, index = True, return_partitions = False)
+        self.assertEqual(result, [0, 0, 1, 1, 1, 2, 2])  
         
 
 unittest.main() 

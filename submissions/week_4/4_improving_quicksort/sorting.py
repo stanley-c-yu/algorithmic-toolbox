@@ -51,7 +51,7 @@ def nonrandomized_quick_sort(a, l, r, index, return_partitions):
     mid_left_idx, mid_right_idx = partition3(a, l, r, index)    
     if return_partitions == True: 
         print("Left of Pivot Partition: ", a[l:mid_left_idx])
-        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
+        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r])
         return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
     #use partition3
     randomized_quick_sort(a, l, mid_left_idx - 1)
@@ -77,11 +77,11 @@ def right_sided_quick_sort(a, l, r, index, return_partitions):
     mid_left_idx, mid_right_idx = partition3(a, l, r, index)    
     if return_partitions == True: 
         print("Left of Pivot Partition: ", a[l:mid_left_idx])
-        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
-        return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
+        print("Right of Pivot Partition: ", a[mid_right_idx + 1:r])
+        return a[l:mid_left_idx], a[mid_right_idx + 1:r]
     #use partition3
     #left_sided_quick_sort(a, l, mid_left_idx - 1, index, return_partitions)
-    right_sided_quick_sort(a, mid_right_idx + 1, r + 1, index, return_partitions) 
+    right_sided_quick_sort(a, mid_right_idx + 1, r, index, return_partitions) 
     return a    
         
 def randomized_quick_sort(a, l, r, index, return_partitions):
@@ -95,9 +95,11 @@ def randomized_quick_sort(a, l, r, index, return_partitions):
         print("Right of Pivot Partition: ", a[mid_right_idx + 1:r + 1])
         return a[l:mid_left_idx], a[mid_right_idx + 1:r + 1]
     #use partition3
-    randomized_quick_sort(a, l, mid_left_idx - 1)
-    randomized_quick_sort(a, mid_right_idx + 1, r) 
+    randomized_quick_sort(a, l, mid_left_idx - 1, index, return_partitions)
+    randomized_quick_sort(a, mid_right_idx + 1, r, index, return_partitions) 
     return a
+
+
 
 
 if __name__ == '__main__':
